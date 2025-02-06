@@ -20,7 +20,7 @@ export default function RootLayout({
             className={urbanist.className}
         >
             <div className={'flex h-screen'}>
-                <div className={'flex flex-col bg-white py-5 border border-r-[1px] border-r-[#E7E5E4] w-[90px] h-full'}>
+                <div className={'flex flex-col bg-white py-5 border border-r-[1px] border-r-[#E7E5E4] w-[50px] xl:w-[90px] h-full'}>
                     <button><img src="/pictures/logo2.png" alt="" className={'mx-auto'} /></button>
                     <div className={'flex-grow mx-auto pt-[100px] w-fit h-[192px] flex flex-col gap-[60px]'}>
                         <button><img src="/icons/home-2.svg" alt="" className={'size-[24px]'}/></button>
@@ -29,17 +29,19 @@ export default function RootLayout({
                     </div>
                     <button><img src="/icons/logout.svg" alt="" className={'size-[24px] mx-auto bottom-3'}/></button>
                 </div>
-                <div className={'w-full bg-white text-black px-[50px]'}>
-                    <div className={'h-[90px] flex w-full justify-between items-center'}>
+                <div className={'w-full bg-white text-black overflow-y-auto px-[20px] xl:px-[50px]'}>
+                    <div className={'sticky top-0 z-10 h-[90px] flex w-full justify-between items-center mb-[50px] bg-white'}>
                         <span className={'text-[26px] font-500'}>Bienvenue, Andri A.</span>
                         <div className={'flex gap-2 items-center'}>
                             <div className={'size-[40px] border border-[1px solid #F2F2F2] rounded-lg flex items-center'}>
-                                <img src="/icons/gong.svg" alt="" className={'size-[px] mx-auto'}/>
+                                <img src="/icons/gong.svg" alt="" className={'size-[24px] mx-auto'}/>
                             </div>
                             <img src="/pictures/Avatar.png" alt="" className={'size-[50px]'}/>
                         </div>
                     </div>
-                    {children}
+                    <div className={'flex flex-col'}>
+                        {children}
+                    </div>
                 </div>
             </div>
         </body>
