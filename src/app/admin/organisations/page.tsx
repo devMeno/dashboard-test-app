@@ -1,19 +1,87 @@
+"use client"
 import React from 'react';
+import {useState} from "react";
 import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
+import {fakeOrganizationsData} from "@/utils/datas/fakeOrganizationsData";
+import PaginationComponent from "@/components/paginationComponent";
 
+const grayBadgeStyle = "text-[#9FA8BC] bg-[#E7EBF3]"
+const blueBadgeStyle = "text-[#30B2EA] bg-[#EAF7FC]"
 const greenBadgeStyle = "text-green-500 bg-green-100"
 const redBadgeStyle = "text-red-500 bg-red-100"
 const inputStyle = "border border-[#E7EBF3] text-[#04060F] text-[16px] font-400 rounded rounded-l-full rounded-r-full w-[496px]  h-[48px] px-[20px] bg-white"
 const labelStyle = "absolute left-4 -top-3 bg-white px-1 font-bold text-[#9FA8BC] text-[12px]"
 
+const itemsPerPage = 5;
+
+function getBadgeStyle(status: string) {
+    switch (status) {
+        case "actif":
+            return greenBadgeStyle;
+        case "inactif":
+            return grayBadgeStyle;
+        case "en attente":
+            return blueBadgeStyle;
+        case "bloqué":
+            return redBadgeStyle;
+    }
+}
+
+function getInitials(name: string) {
+    const initials = name
+        .split(" ")
+        .map(word => word[0])
+        .slice(0, 2)
+        .join("")
+        .toUpperCase();
+    return initials;
+}
 
 const Page = () => {
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const goToPage = (page: number) => {
+        if (page < 1 || page > totalPages) return;
+        setCurrentPage(page);
+    };
+
+
+    // Calcul des données à afficher
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const pageData = fakeOrganizationsData.slice(startIndex, endIndex);
+
+    // Nombre total de pages
+    const totalPages = Math.ceil(fakeOrganizationsData.length / itemsPerPage);
+
+    // Gestion du changement de page
+    const handlePrevious = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const handleNext = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
     return (
         <>
            <div className={'flex justify-between w-full px-4'}>
                <div className={'flex items-center gap-2'}>
-                   <input type="checkbox" className={'size-6 appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                   <select name="" id="" className={'w-[189px] h-[32px] text-[14px] font-medium text-[9FA8BC] rounded-l-full rounded-r-full text-center'}>
+                   <input
+                       type="checkbox"
+                       className={
+                           "size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:border-blue-500 cursor-pointer transition-all relative " +
+                           "before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:w-3 before:h-3 before:bg-transparent before:border-2 before:border-transparent before:rounded-sm before:transform before:-translate-x-1/2 before:-translate-y-1/2 before:transition-all " +
+                           "checked:before:bg-blue-500 checked:before:border-blue-500 " +
+                           "after:content-['✓'] after:absolute after:top-1/2 after:left-1/2 after:transform after:-translate-x-1/2 after:-translate-y-1/2 after:text-white after:text-xs after:pointer-events-none after:opacity-0 " +
+                           "checked:after:opacity-100"
+                       }
+                   />
+                   <select name="" id="" className={'w-[189px] h-[32px] text-[14px] font-medium text-[#9FA8BC] rounded-l-full rounded-r-full text-center'}>
                        <option value="">Sélectionner une action</option>
                    </select>
                </div>
@@ -127,477 +195,82 @@ const Page = () => {
                </div>
            </div>
             <hr className={'my-[24px]'}/>
-            <table className="w-full table-fixed mt-[24px] overflow-hidden rounded-t-lg">
-                <thead className="bg-[#E9F0FF]">
-                <tr className="h-[40px] text-[14px] py-[8px] font-bold">
-                    <th className="w-[4%] text-left px-4 rounded-tl-[8px]"></th>
-                    <th className="w-[21%] text-left px-4">Organisation</th>
-                    <th className="w-[9%] text-left px-4">Utilisateurs</th>
-                    <th className="w-[22%] text-left px-4">Administrateurs</th>
-                    <th className="w-[22%] text-left px-4">Adresse e-mail</th>
-                    <th className="w-[182px] text-left px-4">Statut</th>
-                    <th className="w-auto text-left px-4 rounded rounded-tr-[8px]"></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${greenBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Actif</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <div className={'float-right'}>
-                            <Dialog>
-                                <DialogTrigger>
-                                    <div>
-                                        <img src="/icons/trash.svg" alt=""/>
-                                    </div>
-                                </DialogTrigger>
-                                <DialogContent className={'px-[40px] py-[40px] w-[624px]'}>
-                                    <DialogHeader>
-                                        <DialogTitle className={'text-center mb-[40px]'}>Supprimer une organisation</DialogTitle>
-                                        <p className={'mx-auto'}>Voulez-vous supprimer l'organisation <span className={'font-bold'}>Pentatonic</span> ?</p>
-                                        <div className={'flex mx-auto gap-3 pt-[24px]'}>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-[#9FA8BC] bg-[#E7EBF3] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Annuler</button>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-white bg-[#F33F19] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Supprimer</button>
-                                        </div>
-                                    </DialogHeader>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${redBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Bloqué</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <div className={'float-right'}>
-                            <Dialog>
-                                <DialogTrigger>
-                                    <div>
-                                        <img src="/icons/trash.svg" alt=""/>
-                                    </div>
-                                </DialogTrigger>
-                                <DialogContent className={'px-[40px] py-[40px] w-[624px]'}>
-                                    <DialogHeader>
-                                        <DialogTitle className={'text-center mb-[40px]'}>Supprimer une organisation</DialogTitle>
-                                        <p className={'mx-auto'}>Voulez-vous supprimer l'organisation <span className={'font-bold'}>Pentatonic</span> ?</p>
-                                        <div className={'flex mx-auto gap-3 pt-[24px]'}>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-[#9FA8BC] bg-[#E7EBF3] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Annuler</button>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-white bg-[#F33F19] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Supprimer</button>
-                                        </div>
-                                    </DialogHeader>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${greenBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Actif</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <div className={'float-right'}>
-                            <Dialog>
-                                <DialogTrigger>
-                                    <div>
-                                        <img src="/icons/trash.svg" alt=""/>
-                                    </div>
-                                </DialogTrigger>
-                                <DialogContent className={'px-[40px] py-[40px] w-[624px]'}>
-                                    <DialogHeader>
-                                        <DialogTitle className={'text-center mb-[40px]'}>Supprimer une organisation</DialogTitle>
-                                        <p className={'mx-auto'}>Voulez-vous supprimer l'organisation <span className={'font-bold'}>Pentatonic</span> ?</p>
-                                        <div className={'flex mx-auto gap-3 pt-[24px]'}>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-[#9FA8BC] bg-[#E7EBF3] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Annuler</button>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-white bg-[#F33F19] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Supprimer</button>
-                                        </div>
-                                    </DialogHeader>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${redBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Bloqué</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <div className={'float-right'}>
-                            <Dialog>
-                                <DialogTrigger>
-                                    <div>
-                                        <img src="/icons/trash.svg" alt=""/>
-                                    </div>
-                                </DialogTrigger>
-                                <DialogContent className={'px-[40px] py-[40px] w-[624px]'}>
-                                    <DialogHeader>
-                                        <DialogTitle className={'text-center mb-[40px]'}>Supprimer une organisation</DialogTitle>
-                                        <p className={'mx-auto'}>Voulez-vous supprimer l'organisation <span className={'font-bold'}>Pentatonic</span> ?</p>
-                                        <div className={'flex mx-auto gap-3 pt-[24px]'}>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-[#9FA8BC] bg-[#E7EBF3] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Annuler</button>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-white bg-[#F33F19] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Supprimer</button>
-                                        </div>
-                                    </DialogHeader>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${greenBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Actif</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <div className={'float-right'}>
-                            <Dialog>
-                                <DialogTrigger>
-                                    <div>
-                                        <img src="/icons/trash.svg" alt=""/>
-                                    </div>
-                                </DialogTrigger>
-                                <DialogContent className={'px-[40px] py-[40px] w-[624px]'}>
-                                    <DialogHeader>
-                                        <DialogTitle className={'text-center mb-[40px]'}>Supprimer une organisation</DialogTitle>
-                                        <p className={'mx-auto'}>Voulez-vous supprimer l'organisation <span className={'font-bold'}>Pentatonic</span> ?</p>
-                                        <div className={'flex mx-auto gap-3 pt-[24px]'}>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-[#9FA8BC] bg-[#E7EBF3] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Annuler</button>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-white bg-[#F33F19] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Supprimer</button>
-                                        </div>
-                                    </DialogHeader>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${redBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Bloqué</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <div className={'float-right'}>
-                            <Dialog>
-                                <DialogTrigger>
-                                    <div>
-                                        <img src="/icons/trash.svg" alt=""/>
-                                    </div>
-                                </DialogTrigger>
-                                <DialogContent className={'px-[40px] py-[40px] w-[624px]'}>
-                                    <DialogHeader>
-                                        <DialogTitle className={'text-center mb-[40px]'}>Supprimer une organisation</DialogTitle>
-                                        <p className={'mx-auto'}>Voulez-vous supprimer l'organisation <span className={'font-bold'}>Pentatonic</span> ?</p>
-                                        <div className={'flex mx-auto gap-3 pt-[24px]'}>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-[#9FA8BC] bg-[#E7EBF3] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Annuler</button>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-white bg-[#F33F19] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Supprimer</button>
-                                        </div>
-                                    </DialogHeader>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${greenBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Actif</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <div className={'float-right'}>
-                            <Dialog>
-                                <DialogTrigger>
-                                    <div>
-                                        <img src="/icons/trash.svg" alt=""/>
-                                    </div>
-                                </DialogTrigger>
-                                <DialogContent className={'px-[40px] py-[40px] w-[624px]'}>
-                                    <DialogHeader>
-                                        <DialogTitle className={'text-center mb-[40px]'}>Supprimer une organisation</DialogTitle>
-                                        <p className={'mx-auto'}>Voulez-vous supprimer l'organisation <span className={'font-bold'}>Pentatonic</span> ?</p>
-                                        <div className={'flex mx-auto gap-3 pt-[24px]'}>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-[#9FA8BC] bg-[#E7EBF3] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Annuler</button>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-white bg-[#F33F19] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Supprimer</button>
-                                        </div>
-                                    </DialogHeader>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${redBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Bloqué</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <div className={'float-right'}>
-                            <Dialog>
-                                <DialogTrigger>
-                                    <div>
-                                        <img src="/icons/trash.svg" alt=""/>
-                                    </div>
-                                </DialogTrigger>
-                                <DialogContent className={'px-[40px] py-[40px] w-[624px]'}>
-                                    <DialogHeader>
-                                        <DialogTitle className={'text-center mb-[40px]'}>Supprimer une organisation</DialogTitle>
-                                        <p className={'mx-auto'}>Voulez-vous supprimer l'organisation <span className={'font-bold'}>Pentatonic</span> ?</p>
-                                        <div className={'flex mx-auto gap-3 pt-[24px]'}>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-[#9FA8BC] bg-[#E7EBF3] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Annuler</button>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-white bg-[#F33F19] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Supprimer</button>
-                                        </div>
-                                    </DialogHeader>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${greenBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Actif</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <div className={'float-right'}>
-                            <Dialog>
-                                <DialogTrigger>
-                                    <div>
-                                        <img src="/icons/trash.svg" alt=""/>
-                                    </div>
-                                </DialogTrigger>
-                                <DialogContent className={'px-[40px] py-[40px] w-[624px]'}>
-                                    <DialogHeader>
-                                        <DialogTitle className={'text-center mb-[40px]'}>Supprimer une organisation</DialogTitle>
-                                        <p className={'mx-auto'}>Voulez-vous supprimer l'organisation <span className={'font-bold'}>Pentatonic</span> ?</p>
-                                        <div className={'flex mx-auto gap-3 pt-[24px]'}>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-[#9FA8BC] bg-[#E7EBF3] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Annuler</button>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-white bg-[#F33F19] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Supprimer</button>
-                                        </div>
-                                    </DialogHeader>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${redBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Bloqué</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <div className={'float-right'}>
-                            <Dialog>
-                                <DialogTrigger>
-                                    <div>
-                                        <img src="/icons/trash.svg" alt=""/>
-                                    </div>
-                                </DialogTrigger>
-                                <DialogContent className={'px-[40px] py-[40px] w-[624px]'}>
-                                    <DialogHeader>
-                                        <DialogTitle className={'text-center mb-[40px]'}>Supprimer une organisation</DialogTitle>
-                                        <p className={'mx-auto'}>Voulez-vous supprimer l'organisation <span className={'font-bold'}>Pentatonic</span> ?</p>
-                                        <div className={'flex mx-auto gap-3 pt-[24px]'}>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-[#9FA8BC] bg-[#E7EBF3] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Annuler</button>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-white bg-[#F33F19] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Supprimer</button>
-                                        </div>
-                                    </DialogHeader>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${greenBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Actif</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <div className={'float-right'}>
-                            <Dialog>
-                                <DialogTrigger>
-                                    <div>
-                                        <img src="/icons/trash.svg" alt=""/>
-                                    </div>
-                                </DialogTrigger>
-                                <DialogContent className={'px-[40px] py-[40px] w-[624px]'}>
-                                    <DialogHeader>
-                                        <DialogTitle className={'text-center mb-[40px]'}>Supprimer une organisation</DialogTitle>
-                                        <p className={'mx-auto'}>Voulez-vous supprimer l'organisation <span className={'font-bold'}>Pentatonic</span> ?</p>
-                                        <div className={'flex mx-auto gap-3 pt-[24px]'}>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-[#9FA8BC] bg-[#E7EBF3] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Annuler</button>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-white bg-[#F33F19] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Supprimer</button>
-                                        </div>
-                                    </DialogHeader>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${redBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Bloqué</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <div className={'float-right'}>
-                            <Dialog>
-                                <DialogTrigger>
-                                    <div>
-                                        <img src="/icons/trash.svg" alt=""/>
-                                    </div>
-                                </DialogTrigger>
-                                <DialogContent className={'px-[40px] py-[40px] w-[624px]'}>
-                                    <DialogHeader>
-                                        <DialogTitle className={'text-center mb-[40px]'}>Supprimer une organisation</DialogTitle>
-                                        <p className={'mx-auto'}>Voulez-vous supprimer l'organisation <span className={'font-bold'}>Pentatonic</span> ?</p>
-                                        <div className={'flex mx-auto gap-3 pt-[24px]'}>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-[#9FA8BC] bg-[#E7EBF3] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Annuler</button>
-                                            <button type={"submit"} className={'font-600 text-16 justify-center text-white bg-[#F33F19] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Supprimer</button>
-                                        </div>
-                                    </DialogHeader>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div className={'relative overflow-auto max-h-[400px] rounded-t-lg'}>
+                <table className="w-full table-fixed overflow-hidden rounded-t-lg">
+                    <thead className="bg-[#E9F0FF] sticky top-0 z-10">
+                    <tr className="h-[40px] text-[14px] py-[8px] font-bold">
+                        <th className="w-[4%] text-left px-4 rounded-tl-[8px]"></th>
+                        <th className="w-[21%] text-left px-4">Organisation</th>
+                        <th className="w-[9%] text-left px-4">Utilisateurs</th>
+                        <th className="w-[22%] text-left px-4">Administrateurs</th>
+                        <th className="w-[22%] text-left px-4">Adresse e-mail</th>
+                        <th className="w-[182px] text-left px-4">Statut</th>
+                        <th className="w-auto text-left px-4 rounded rounded-tr-[8px]"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {pageData.map((item, index) => (
+                        <tr className="h-[72px] border-b border-dashed" key={index}>
+                            <td className="px-[16px] py-[8px]">
+                                <input
+                                    type="checkbox"
+                                    className={
+                                        "size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:border-blue-500 cursor-pointer transition-all relative " +
+                                        "before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:w-3 before:h-3 before:bg-transparent before:border-2 before:border-transparent before:rounded-sm before:transform before:-translate-x-1/2 before:-translate-y-1/2 before:transition-all " +
+                                        "checked:before:bg-blue-500 checked:before:border-blue-500 " +
+                                        "after:content-['✓'] after:absolute after:top-1/2 after:left-1/2 after:transform after:-translate-x-1/2 after:-translate-y-1/2 after:text-white after:text-xs after:pointer-events-none after:opacity-0 " +
+                                        "checked:after:opacity-100"
+                                    }
+                                />
+                            </td>
+                            <td className="px-[16px] py-[8px]">{item.organization_name}</td>
+                            <td className="px-[16px] py-[8px]">{item.users}</td>
+                            <td className="px-[16px] py-[8px]">
+                                <div className={'flex gap-2 items-center'}>
+                                    <div className={'size-[40px] flex items-center rounded-full bg-[#DCDCFE] text-[#246BFD]'}><span className={'mx-auto'}>{getInitials(item.admin)}</span></div>
+                                    {item.admin}
+                                </div>
+                            </td>
+                            <td className="px-[16px] py-[8px]">{item.e_mail}</td>
+                            <td className="px-[16px] py-[8px]">
+                                <div className={`${getBadgeStyle(item.status)} px-[8px] py-[4px] w-[81px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>{item.status}</div>
+                            </td>
+                            <td className="px-[16px] py-[8px]">
+                                <div className={'float-right'}>
+                                    <Dialog>
+                                        <DialogTrigger>
+                                            <div>
+                                                <img src="/icons/trash.svg" alt=""/>
+                                            </div>
+                                        </DialogTrigger>
+                                        <DialogContent className={'px-[40px] py-[40px] w-[624px]'}>
+                                            <DialogHeader>
+                                                <DialogTitle className={'text-center mb-[40px]'}>Supprimer une organisation</DialogTitle>
+                                                <p className={'mx-auto'}>Voulez-vous supprimer l'organisation <span className={'font-bold'}>{item.organization_name}</span> ?</p>
+                                                <div className={'flex mx-auto gap-3 pt-[24px]'}>
+                                                    <button type={"submit"} className={'font-600 text-16 justify-center text-[#9FA8BC] bg-[#E7EBF3] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Annuler</button>
+                                                    <button type={"submit"} className={'font-600 text-16 justify-center text-white bg-[#F33F19] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Supprimer</button>
+                                                </div>
+                                            </DialogHeader>
+                                        </DialogContent>
+                                    </Dialog>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
+            {/* PaginationComponent */}
+            <div className={'float-right mr-[30px]'}>
+                <PaginationComponent
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    goToPage={goToPage}
+                    handleNext={handleNext}
+                    handlePrevious={handlePrevious}
+                />
+            </div>
         </>
     );
 };

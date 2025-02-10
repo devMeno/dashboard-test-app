@@ -1,12 +1,12 @@
 import React from 'react';
 
-interface profilDataProps {
+interface ProfilDataProps {
     iconUrl: string;
     title: string;
     value: string;
 }
 
-const ProfileData: React.FC<profilDataProps> = ({iconUrl,title,value}) => {
+const ProfileData: React.FC<ProfilDataProps> = ({iconUrl,title,value}) => {
     return (
         <div className={'w-[284px] p-[14px] flex gap-4 items-center'}>
             <div className={'flex items-center justify-center rounded-full size-[40px] bg-[#E9F0FF]'}>

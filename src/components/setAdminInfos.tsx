@@ -5,10 +5,7 @@ import BlockOrganisationButton from "@/components/dialogButtons/blockOrganisatio
 import DeblockOrganizationButton from "@/components/dialogButtons/deblockOrganizationButton";
 import DeleteOrganizationButton from "@/components/dialogButtons/deleteOrganizationButton";
 import EditOrganizationButton from "@/components/dialogButtons/editOrganizationButton";
-
-const inputStyle = "border border-[#E7EBF3] text-[#04060F] text-[16px] font-400 rounded rounded-l-full rounded-r-full w-[496px] h-[48px] px-[20px]"
-const labelStyle = "absolute left-4 -top-3 bg-white px-1 font-bold text-[#9FA8BC] text-[12px]"
-const eyeStyle = "absolute inset-y-0 right-0 flex items-center pr-3"
+import {inputStyle,labelStyle} from "@/utils/styles";
 
 const SetAdminInfos = () => {
     return (

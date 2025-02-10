@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import {Urbanist} from "next/font/google";
 import React from "react";
+import {BuildingsIcon} from "@/utils/svgIcons/buildings";
+import {Profile2UsersIcon} from "@/utils/svgIcons/profile2Users";
+import {Home2Icon} from "@/utils/svgIcons/home2";
+import {DashboardTabProvider} from "@/context/dashboard/dashboardTabContext";
+import Sidebar from "@/components/sidebar";
 
 const urbanist = Urbanist({subsets: ["latin"]});
 
@@ -14,21 +19,15 @@ export default function RootLayout({
                                    }: Readonly<{
     children: React.ReactNode;
 }>) {
+
     return (
         <html lang="en">
         <body
             className={urbanist.className}
         >
+            <DashboardTabProvider>
             <div className={'flex h-screen'}>
-                <div className={'flex flex-col bg-white py-5 border border-r-[1px] border-r-[#E7E5E4] w-[50px] xl:w-[90px] h-full'}>
-                    <button><img src="/pictures/logo2.png" alt="" className={'mx-auto'} /></button>
-                    <div className={'flex-grow mx-auto pt-[100px] w-fit h-[192px] flex flex-col gap-[60px]'}>
-                        <button><img src="/icons/home-2.svg" alt="" className={'size-[24px]'}/></button>
-                        <button><img src="/icons/buildings.svg" alt="" className={'size-[24px]'}/></button>
-                        <button><img src="/icons/profile-2user.svg" alt="" className={'size-[24px]'}/></button>
-                    </div>
-                    <button><img src="/icons/logout.svg" alt="" className={'size-[24px] mx-auto bottom-3'}/></button>
-                </div>
+                <Sidebar/>
                 <div className={'w-full bg-white text-black overflow-y-auto px-[20px] xl:px-[50px]'}>
                     <div className={'sticky top-0 z-10 h-[90px] flex w-full justify-between items-center mb-[50px] bg-white'}>
                         <span className={'text-[26px] font-500'}>Bienvenue, Andri A.</span>
@@ -44,6 +43,7 @@ export default function RootLayout({
                     </div>
                 </div>
             </div>
+            </DashboardTabProvider>
         </body>
         </html>
     );

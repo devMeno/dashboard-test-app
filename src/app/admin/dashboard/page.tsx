@@ -1,9 +1,15 @@
 import React from 'react';
 import DetailsCard from "@/components/detailsCard";
+import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
+import {fakeOrganizationsData} from "@/utils/datas/fakeOrganizationsData";
+import {getInitials} from "@/utils/functions";
+import {getOrganizationsStatusBadgeStyle} from "@/utils/functions";
+import {cellStyle,headerCellStyle} from "@/utils/styles";
 
-const greenBadgeStyle = "text-green-500 bg-green-100"
-const redBadgeStyle = "text-red-500 bg-red-100"
 
+const activesOrganizationsData = fakeOrganizationsData.slice(18,22)
+
+console.log(activesOrganizationsData)
 
 const Page = () => {
     return (
@@ -31,286 +37,63 @@ const Page = () => {
                 />
             </div>
             <p className={'font-bold text-[20px]'}>Dernières organisations actives</p>
-            <table className="w-full table-fixed mt-[24px] overflow-hidden rounded-t-lg">
-                <thead className="bg-[#E9F0FF]">
+            <div className={'relative overflow-auto max-h-[400px] rounded-t-lg mt-[24px]'}>
+                <table className="w-full table-fixed overflow-hidden rounded-t-lg">
+                    <thead className="bg-[#E9F0FF] sticky top-0 z-10">
                     <tr className="h-[40px] text-[14px] py-[8px] font-bold">
-                        <th className="w-[4%] text-left px-4 rounded-tl-[8px]"></th>
-                        <th className="w-[21%] text-left px-4">Organisation</th>
-                        <th className="w-[9%] text-left px-4">Utilisateurs</th>
-                        <th className="w-[22%] text-left px-4">Administrateurs</th>
-                        <th className="w-[22%] text-left px-4">Adresse e-mail</th>
-                        <th className="w-[182px] text-left px-4">Statut</th>
-                        <th className="w-auto text-left px-4 rounded rounded-tr-[8px]"></th>
+                        <th className={`${headerCellStyle + ' w-[4%] rounded-tl-[8px]'}`}></th>
+                        <th className={`${headerCellStyle + ' w-[21%]'}`}>Organisation</th>
+                        <th className={`${headerCellStyle + ' w-[9%]'}`}>Utilisateurs</th>
+                        <th className={`${headerCellStyle + ' w-[22%]'}`}>Administrateurs</th>
+                        <th className={`${headerCellStyle + ' w-[22%]'}`}>Adresse e-mail</th>
+                        <th className={`${headerCellStyle + ' w-[182px]'}`}>Statut</th>
+                        <th className={`w-auto rounded rounded-tr-[8px]`}></th>
                     </tr>
-                </thead>
-                <tbody>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${greenBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Actif</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <button className={'float-right'}>
-                            <img src="/icons/trash.svg" alt=""/>
-                        </button>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${redBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Bloqué</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <button className={'float-right'}>
-                            <img src="/icons/trash.svg" alt=""/>
-                        </button>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${greenBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Actif</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <button className={'float-right'}>
-                            <img src="/icons/trash.svg" alt=""/>
-                        </button>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${redBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Bloqué</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <button className={'float-right'}>
-                            <img src="/icons/trash.svg" alt=""/>
-                        </button>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${redBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Bloqué</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <button className={'float-right'}>
-                            <img src="/icons/trash.svg" alt=""/>
-                        </button>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${redBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Bloqué</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <button className={'float-right'}>
-                            <img src="/icons/trash.svg" alt=""/>
-                        </button>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${redBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Bloqué</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <button className={'float-right'}>
-                            <img src="/icons/trash.svg" alt=""/>
-                        </button>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${redBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Bloqué</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <button className={'float-right'}>
-                            <img src="/icons/trash.svg" alt=""/>
-                        </button>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${redBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Bloqué</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <button className={'float-right'}>
-                            <img src="/icons/trash.svg" alt=""/>
-                        </button>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${redBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Bloqué</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <button className={'float-right'}>
-                            <img src="/icons/trash.svg" alt=""/>
-                        </button>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${redBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Bloqué</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <button className={'float-right'}>
-                            <img src="/icons/trash.svg" alt=""/>
-                        </button>
-                    </td>
-                </tr>
-                <tr className="h-[72px] border-b border-dashed">
-                    <td className="px-4 py-2">
-                        <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
-                    </td>
-                    <td className="px-4 py-2">Company Name</td>
-                    <td className="px-4 py-2">16</td>
-                    <td className="px-4 py-2">
-                        <div className={'flex gap-2 items-center'}>
-                            <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>BE</span></div>
-                            Benjamin Evalent
-                        </div>
-                    </td>
-                    <td className="px-4 py-2">norman@example.com</td>
-                    <td className="px-4 py-2">
-                        <div className={`${redBadgeStyle} px-[8px] py-[4px] w-[80px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>Bloqué</div>
-                    </td>
-                    <td className="px-4 py-2">
-                        <button className={'float-right'}>
-                            <img src="/icons/trash.svg" alt=""/>
-                        </button>
-                    </td>
-                </tr>
-
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {activesOrganizationsData.map((item, index) => (
+                            <tr className="h-[72px] border-b border-dashed" key={index}>
+                                <td className={cellStyle}>
+                                    <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
+                                </td>
+                                <td className={cellStyle}>{item.organization_name}</td>
+                                <td className={cellStyle}>{item.users}</td>
+                                <td className={cellStyle}>
+                                    <div className={'flex gap-2 items-center'}>
+                                        <div className={'size-[40px] flex items-center rounded-full bg-blue-50 text-blue-500'}><span className={'mx-auto'}>{getInitials(item.admin)}</span></div>
+                                        {item.admin}
+                                    </div>
+                                </td>
+                                <td className={cellStyle}>{item.e_mail}</td>
+                                <td className={cellStyle}>
+                                    <div className={`${getOrganizationsStatusBadgeStyle(item.status)} px-[8px] py-[4px] w-[81px] text-center rounded-l-full rounded-r-full font-medium text-[14px]`}>{item.status}</div>
+                                </td>
+                                <td className={cellStyle}>
+                                    <div className={'float-right'}>
+                                        <Dialog>
+                                            <DialogTrigger>
+                                                <div>
+                                                    <img src="/icons/trash.svg" alt=""/>
+                                                </div>
+                                            </DialogTrigger>
+                                            <DialogContent className={'px-[40px] py-[40px] w-[624px]'}>
+                                                <DialogHeader>
+                                                    <DialogTitle className={'text-center mb-[40px]'}>Supprimer une organisation</DialogTitle>
+                                                    <p className={'mx-auto'}>Voulez-vous supprimer l'organisation <span className={'font-bold'}>{item.organization_name}</span> ?</p>
+                                                    <div className={'flex mx-auto gap-3 pt-[24px]'}>
+                                                        <button type={"submit"} className={'font-600 text-16 justify-center text-[#9FA8BC] bg-[#E7EBF3] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Annuler</button>
+                                                        <button type={"submit"} className={'font-600 text-16 justify-center text-white bg-[#F33F19] w-[240px] h-[40px] rounded rounded-l-full rounded-r-full'}>Supprimer</button>
+                                                    </div>
+                                                </DialogHeader>
+                                            </DialogContent>
+                                        </Dialog>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </>
     );
 };

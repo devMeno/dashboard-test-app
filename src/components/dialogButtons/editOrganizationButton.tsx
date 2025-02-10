@@ -1,13 +1,14 @@
 import React from 'react';
 import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
+import {dialogButtonStyle, dialogContentStyle} from "@/utils/styles";
 
 const EditOrganizationButton = () => {
     return (
         <Dialog>
             <DialogTrigger>
-                <div className={'bg-[#246BFD] px-[24px] py-[10px] rounded-l-full rounded-r-full text-white text-[14px] font-semibold'}>Modifier</div>
+                <div className={`${dialogButtonStyle + ' bg-[#246BFD] text-white text-[14px]'}`}>Modifier</div>
             </DialogTrigger>
-            <DialogContent className={'px-[40px] py-[40px] w-[624px]'}>
+            <DialogContent className={dialogContentStyle}>
                 <DialogHeader>
                     <DialogTitle></DialogTitle>
                     <div className={'size-[120px] rounded-full bg-[#ECF9E8] mx-auto flex items-center'}>
