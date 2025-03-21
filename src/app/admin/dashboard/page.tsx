@@ -54,7 +54,16 @@ const Page = () => {
                         {activesOrganizationsData.map((item, index) => (
                             <tr className="h-[72px] border-b border-dashed" key={index}>
                                 <td className={cellStyle}>
-                                    <input type="checkbox" className={'size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:bg-blue-500 checked:border-blue-500 cursor-pointer transition-all'}/>
+                                    <input
+                                        type="checkbox"
+                                        className={
+                                            "size-6 mt-[5px] appearance-none border-[1px] border-[#9FA8BC] rounded-lg checked:border-blue-500 cursor-pointer transition-all relative " +
+                                            "before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:w-3 before:h-3 before:bg-transparent before:border-2 before:border-transparent before:rounded-sm before:transform before:-translate-x-1/2 before:-translate-y-1/2 before:transition-all " +
+                                            "checked:before:bg-blue-500 checked:before:border-blue-500 " +
+                                            "after:content-['✓'] after:absolute after:top-1/2 after:left-1/2 after:transform after:-translate-x-1/2 after:-translate-y-1/2 after:text-white after:text-xs after:pointer-events-none after:opacity-0 " +
+                                            "checked:after:opacity-100"
+                                        }
+                                    />
                                 </td>
                                 <td className={cellStyle}>{item.organization_name}</td>
                                 <td className={cellStyle}>{item.users}</td>
